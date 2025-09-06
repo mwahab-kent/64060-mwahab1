@@ -38,5 +38,5 @@ Cereals %>%
     median_fat=median(fat,na.rm=TRUE),
     sd_fat=sd(fat,na.rm=TRUE),
     )
-    
+# test  
     
