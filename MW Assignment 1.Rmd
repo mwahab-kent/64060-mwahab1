@@ -1,0 +1,83 @@
+#Title-Assignment 1-Marzan Wahab
+library(readr)
+Cereals <- read_csv("Cereals.csv")
+View(Cereals) # Dataset provided from course module
+
+# Print out descriptive stats for categorical variables
+table(Cereals$mfr)
+# Table output
+#A  G  K  N  P  Q  R 
+#1 22 23  6  9  8  8 
+table(Cereals$type)
+#Table outout
+#C  H 
+#74  3 
+
+# print out descriptive statistics for quantitative var (sugars,fats)
+print("summary of sugars and fats")
+summary(Cereals[,c("sugars","fat")])
+#table Output
+#  sugars            fat       
+# Min.   : 0.000   Min.   :0.000  
+#1st Qu.: 3.000   1st Qu.:0.000  
+#Median : 7.000   Median :1.000  
+#Mean   : 7.026   Mean   :1.013  
+#3rd Qu.:11.000   3rd Qu.:2.000  
+#Max.   :15.000   Max.   :5.000  
+#NA's   :1           
+
+#summarize quantatitive var by group category(mfr) cal mean- dplyr 
+Cereals %>%
+  group_by(mfr) %>%
+  summarise(
+    count=n(),
+    sugars=mean(sugars,na.rm=TRUE),
+    fat=mean(fat,na.rm=TRUE),
+    calories=mean(calories,na.rm=TRUE)
+     )
+#table output
+# A tibble: 7 × 5
+# mfr   count sugars   fat calories
+#<chr> <int>  <dbl> <dbl>    <dbl>
+#1 A         1   3    1        100  
+#2 G        22   7.95 1.36     111. 
+#3 K        23   7.57 0.609    109. 
+#4 N         6   1.83 0.167     86.7
+#5 P         9   8.78 0.889    109. 
+#6 Q         8   6.14 1.75      95  
+#7 R         8   6.12 1.25     115  
+
+#summarize quantatitive var by group category(mfr) cal median-dplyr
+Cereals %>%
+  group_by(mfr) %>%
+  summarise(
+    count=n(),
+    sugars=median (sugars,na.rm=TRUE),
+    fat=median(fat,na.rm=TRUE),
+    calories=median(calories,na.rm=TRUE)
+     )
+#Table output
+# A tibble: 7 × 5
+#mfr   count sugars   fat calories
+#<chr> <int>  <dbl> <dbl>    <dbl>
+#1 A         1    3       1      100
+#2 G        22    8.5     1      110
+#3 K        23    7       0      110
+#4 N         6    0       0       90
+#5 P         9   10       1      110
+#6 Q         8    6       2      100
+#7 R         8    5.5     1      110
+
+#Transformed Calories variable by adding colum
+Cereals<-transform(Cereals,
+                   calories_level=ifelse(calories>=90, "High","Low"))
+print(Cereals)
+
+#plot Data-one quantative and one scatter plot
+plot(Cereals$calories,Cereals$sugars,
+     main = "Sugar and Calories",
+     xlab = "Calories",
+     ylab = "Sugars",
+     pch=20)
+     
+     
